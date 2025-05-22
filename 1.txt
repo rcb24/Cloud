@@ -1,0 +1,60 @@
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+ 
+# Load the California Housing dataset 
+try: 
+    df = pd.read_csv(california_housing_train.csv') 
+except FileNotFoundError: 
+    print("Error: california_housing_train.csv not found.") 
+    exit() 
+ 
+# Function to create histograms 
+def create_histograms(dataframe, features): 
+    for feature in features: 
+        plt.figure(figsize=(8, 6)) 
+        sns.histplot(dataframe[feature], kde=True) #The Kernel Density 
+Estimate (KDE) is added to visualize the distribution curve. 
+        plt.title(f'Histogram of {feature}') 
+        plt.xlabel(feature) 
+        plt.ylabel('Frequency') 
+        plt.show() 
+ 
+# Function to create box plots 
+def create_boxplots(dataframe, features): 
+  for feature in features: 
+    plt.figure(figsize=(8, 6)) 
+    sns.boxplot(x=dataframe[feature]) 
+    plt.title(f'Boxplot of {feature}') 
+    plt.show() 
+# Select numerical features (you might need to adjust based on your 
+dataset) 
+numerical_features = ['longitude', 'latitude', 'housing_median_age', 
+'total_rooms','total_bedrooms', 'population', 'households', 
+'median_income','median_house_value'] 
+ 
+ 
+# Create histograms 
+create_histograms(df, numerical_features) 
+ 
+# Create box plots 
+create_boxplots(df, numerical_features) 
+ 
+# Analyze distributions and identify outliers using the Interquartile 
+Range (IQR) method. 
+print("Analysis:") 
+for feature in numerical_features: 
+    q1 = df[feature].quantile(0.25) 
+    q3 = df[feature].quantile(0.75) 
+    iqr = q3 - q1 
+    lower_bound = q1 - 1.5 * iqr 
+    upper_bound = q3 + 1.5 * iqr 
+    outliers = df[(df[feature] < lower_bound)|(df[feature] > upper_bound)] 
+ 
+    print(f"\nFeature: {feature}") 
+    if not outliers.empty: 
+        print(f"Number of outliers: {len(outliers)}") 
+        print("Outlier values:") 
+        print(outliers[feature]) 
+    else: 
+        print("No outliers detected.")
