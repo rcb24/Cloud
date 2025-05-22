@@ -1,0 +1,24 @@
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+ 
+# Load the California Housing dataset 
+try: 
+    df = pd.read_csv('california_housing_train.csv') 
+except FileNotFoundError: 
+    print("Error: california_housing_train.csv not found") 
+    exit() 
+ 
+# Compute the correlation matrix 
+correlation_matrix = df.corr() 
+ 
+# Visualize the correlation matrix using a heatmap 
+plt.figure(figsize=(12, 10)) 
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm',fmt=".2f") 
+plt.title('Correlation Matrix of California Housing Dataset Features') 
+plt.show() 
+ 
+# Create a pair plot to visualize pairwise relationships 
+sns.pairplot(df) 
+plt.suptitle('Pairwise Relationships between Features', y=1.02) 
+plt.show()
