@@ -1,0 +1,24 @@
+import pandas as pd 
+ 
+def find_s_algorithm(data): 
+    # Initialize the hypothesis with the first positive instance 
+    hypothesis = data.iloc[0, :-1].values.tolist() 
+ 
+    # Iterate through the remaining instances 
+    for index, row in data.iterrows(): 
+        if row[-1] == 'Yes':  # Positive instance 
+            for i in range(len(hypothesis)): 
+                if hypothesis[i] != row[i]: 
+                    hypothesis[i] = '?' 
+    return hypothesis 
+ 
+# Load the training data from a CSV file  
+try: 
+    training_data = pd.read_csv('training_data.csv') 
+except FileNotFoundError: 
+    print("Error: training_data.csv not found.") 
+    exit() 
+ 
+# Run the Find-S algorithm 
+result_hypothesis = find_s_algorithm(training_data) 
+print("The most specific hypothesis is:", result_hypothesis)
