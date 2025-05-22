@@ -1,0 +1,45 @@
+import numpy as np 
+import matplotlib.pyplot as plt 
+from collections import Counter 
+ 
+def knn_classify(k, x, points, labels): 
+    distances = [np.abs(x - point) for point in points] 
+    k_nearest_labels = [labels[i] for i in  
+                        np.argsort(distances)[:k]] 
+    most_common = Counter(k_nearest_labels).most_common(1) 
+    return most_common[0][0] 
+ 
+# Generate 100 random x values between 0 and 1 
+x_values = np.random.rand(100) 
+ 
+# Label the first 50 points 
+labels = [] 
+for i in range(100): 
+    if i < 50: 
+        if x_values[i] <= 0.5: 
+            labels.append("Class1") 
+        else: 
+            labels.append("Class2") 
+    else: 
+        labels.append(None)  # Initialize labels for the remaining   
+                             #points to None 
+# Classify the remaining 50 points using k-NN for different values 
+of k 
+k_values = [1, 2, 3, 4, 5, 20, 30] 
+for k in k_values: 
+    for i in range(50, 100): 
+        labels[i] = knn_classify(k, x_values[i], x_values[:50],  
+                    labels[:50]) 
+# Visualization for each k 
+plt.figure(figsize=(8, 6)) 
+plt.scatter(x_values[:50], [0] * 50, c=['red' if label ==  
+'Class1' else 'blue' for label in labels[:50]],  
+label='Training Data') 
+plt.scatter(x_values[50:], [0] * 50, c=['green' if label ==  
+'Class1' else 'purple' for label in labels[50:]],  
+label=f'k = {k}') 
+plt.xlabel('x values') 
+plt.ylabel('Class') 
+plt.title(f'k-NN Classification (k={k})') 
+plt.legend() 
+plt.show()
